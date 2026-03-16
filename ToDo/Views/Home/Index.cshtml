@@ -1,0 +1,144 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@inject UserManager<Utilizador> userManager;
+
+@{
+    var utilizador = await userManager.GetUserAsync(User);
+    var primeiroNome = User?.Claims.FirstOrDefault(c => c.Type == "PrimeiroNome")?.Value;
+    var apelido = User?.Claims.FirstOrDefault(c => c.Type == "Apelido")?.Value;
+    var isAdmin = User.IsInRole("Admin");
+    var isGestor = User.IsInRole("Gestor");
+    var isCliente = User.IsInRole("Cliente");
+    var isConvidado = User.IsInRole("Convidado");
+}
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .hero {
+            background: #f4f4f4;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+            .hero h1 {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero a {
+                padding: 0.7rem 1.5rem;
+                font-size: 1rem;
+                color: white;
+                background: #4CAF50;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+                .hero a:hover {
+                    background: #45a049;
+                }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .feature {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            width: 300px;
+            text-align: center;
+        }
+
+            .feature h3 {
+                color: #4CAF50;
+            }
+    </style>
+</head>
+
+<body class="sb-nav-fixed">
+    <div class="container-fluid px-4">
+        <div class="d-flex justify-content-center align-items-center mt-4">
+            <div id="layoutSidenav">
+                <div id="layoutSidenav">
+                    <div class="container-fluid px-4">
+                        <br />
+                        <br />
+                        <div class="card mb-4">
+                            <div class="card-body">
+
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <h1 class="mt-4">Bem Vindo, @($"{primeiroNome} {apelido}")!</h1>
+                                    @if (isAdmin || isGestor)
+                                    {
+                                        <div class="mt-4">
+                                            <a class="btn btn-primary mb-2" href="/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a><br />
+                                            <a class="btn btn-primary" href="/Admin/GerirUtilizadores"><i class="fas fa-users-cog"></i> Gerir Utilizadores</a>
+                                        </div>
+                                    }
+                                    @if (isCliente)
+                                    {
+                                        <div class="mt-4">
+                                            <a class="btn btn-primary mb-2" href="/Tarefas/Index"><i class="fas fa-tasks"></i> Visualizar Tarefas</a><br />
+                                            <a class="btn btn-primary" href="/Tarefas/Create"><i class="fas fa-plus"></i> Criar Tarefa</a>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <section class="hero">
+                                        <h1>Gerencie Suas Tarefas com Facilidade</h1>
+                                        <p>Crie, organize e acompanhe suas tarefas diárias de forma eficiente.</p>
+                                        <a href="/Conta/Registar">Comece Agora</a>
+                                    </section>
+                                    <section id="features" class="features">
+                                        <div class="feature">
+                                            <h3>Gestão Simplificada</h3>
+                                            <hr />
+                                            <p>Crie e categorize suas tarefas para manter tudo sob controle.</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h3>Progresso Visível</h3>
+                                            <hr />
+                                            <p>Acompanhe o andamento de suas tarefas com facilidade.</p>
+                                        </div>
+                                        <div class="feature">
+                                            <h3>Área Administrativa</h3>
+                                            <hr />
+                                            <p>Controle usuários e visualize estatísticas detalhadas.</p>
+                                        </div>
+                                    </section>
+                                }
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+﻿@model IEnumerable<ToDo.Models.Tarefa>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <h1>Tarefas</h1>
+        <a asp-action="Create" class="btn btn-success">Adicionar <i class="fa-solid fa-plus ms-2"></i></a>
+    </div>
+    <ol class="breadcrumb mb-4">
+    </ol>
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Ainda pode esperar</div>
+                <div class="card-footer align-items-center justify-content-between">
+                    @foreach (var tarefa in Model.Where(t => t.Prioridade == "Ainda pode esperar" && t.Estado == "Pendente"))
+                    {
+                        <div class="mt-1">@tarefa.Nome</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Importante</div>
+                <div class="card-footer align-items-center justify-content-between">
+                    @foreach (var tarefa in Model.Where(t => t.Prioridade == "Importante" && t.Estado == "Pendente"))
+                    {
+                        <div class="mt-1">@tarefa.Nome</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Muito Importante</div>
+                <div class="card-footer align-items-center justify-content-between">
+                    @foreach (var tarefa in Model.Where(t => t.Prioridade == "Muito Importante" && t.Estado == "Pendente"))
+                    {
+                        <div class="mt-1">@tarefa.Nome</div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Urgente</div>
+                <div class="card-footer align-items-center justify-content-between">
+                    @foreach (var tarefa in Model.Where(t => t.Prioridade == "Urgente" && t.Estado == "Pendente"))
+                    {
+                        <div class="mt-1">@tarefa.Nome</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Nome)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Prioridade)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Estado)
+                        </th>
+                        <th>
+                            Categoria
+                        </th>
+                        <th>
+                            Data de Criação
+                        </th>
+                        <th>
+                            Data Limite
+                        </th>
+                        <th>
+                            Ações
+                        </th>
+                        <th>
+                            Concluir
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Prioridade)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td>
+                                @item.Categoria?.Nome
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataCriacao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataLimite)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning me-1"><i class="fa-solid fa-pencil"></i></a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger ms-1"><i class="fa-solid fa-trash"></i></a>
+                            </td>
+                            <td>
+                                @if (item.Estado == "Pendente")
+                                {
+                                    <form asp-action="MarcarConcluida" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn btn-success"><i class="fa-solid fa-check"></i></button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model ToDo.Models.Utilizador
+
+@{
+    ViewData["Title"] = "Rebaixar para Cliente";
+}
+
+<div class="container-fluid px-4">
+    <ol class="breadcrumb mb-4">
+    </ol>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1>Rebaixar para Cliente</h1>
+            <div class="alert alert-warning" role="alert">
+                <i class="fa-solid fa-triangle-exclamation"></i> Tens a certeza de que queres rebaixar este utilizador para cliente? Esta ação irá remover permissões adicionais dele.
+            </div>
+            <div>
+                <h4>Utilizador</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        Primeiro nome:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.PrimeiroNome)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Apelido:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Apelido)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Email:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+                </dl>
+
+                <form asp-action="RebaixarParaCliente" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Rebaixar" class="btn btn-warning" />
+                    <a asp-action="GerirUtilizadores" class="btn btn-outline-primary">Voltar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

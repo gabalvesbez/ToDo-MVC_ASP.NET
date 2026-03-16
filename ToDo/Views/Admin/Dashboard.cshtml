@@ -1,0 +1,16 @@
+﻿@using ToDo.ViewModels
+@model DashboardViewModel
+
+<div class="container-fluid px-4">
+    <br />
+    <br />
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2>DashBoard</h2>
+            <br>
+            <p class="fw-semibold"> Total de Usuários: @Model.TotalUtilizadores</p>
+            <p class="fw-semibold">Total de Tarefas: @Model.TotalTarefas</p>
+            <p class="fw-semibold">Tarefas Concluídas: @Model.TarefasCompletadas</p>
+        </div>
+    </div>
+</div>

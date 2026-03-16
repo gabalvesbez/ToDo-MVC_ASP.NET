@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@model IEnumerable<ToDo.ViewModels.UtilizadorViewModel>
+@inject UserManager<Utilizador> UserManager
+@inject SignInManager<Utilizador> SignInManager
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <h1>Gerir Utilizadores</h1>
+    </div>
+    <ol class="breadcrumb mb-4">
+    </ol>
+    <div class="card mb-4">
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>
+                            <a asp-action="GerirUtilizadores" asp-route-sortOrder="@ViewBag.NomeSortParm">Nome</a>
+                        </th>
+                        <th>
+                            <a asp-action="GerirUtilizadores" asp-route-sortOrder="@ViewBag.EmailSortParm">Email</a>
+                        </th>
+                        <th>
+                            <a asp-action="GerirUtilizadores" asp-route-sortOrder="@ViewBag.DataCriacaoSortParm">Data de Criação</a>
+                        </th>
+                        <th>
+                            <a asp-action="GerirUtilizadores" asp-route-sortOrder="@ViewBag.UltimoLoginSortParm">Último Login</a>
+                        </th>
+                        <th>
+                            <a asp-action="GerirUtilizadores" asp-route-sortOrder="@ViewBag.DiasSemLoginSortParm">Dias sem Login</a>
+                        </th>
+                        <th>Cargo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var utilizador = await UserManager.FindByIdAsync(user.Id);
+                        var roles = await UserManager.GetRolesAsync(utilizador);
+                        var isGestor = roles.Contains("Gestor");
+                        var isAdmin = roles.Contains("Admin");
+                        var currentUser = await UserManager.GetUserAsync(User);
+                        var currentUserRoles = await UserManager.GetRolesAsync(currentUser);
+                        var currentUserIsAdmin = currentUserRoles.Contains("Admin");
+
+                        <tr>
+                            <td>@user.Nome</td>
+                            <td>@user.Email</td>
+                            <td>@user.DataCriacao.ToString("dd/MM/yyyy")</td>
+                            <td>@user.UltimoLogin.ToString("dd/MM/yyyy")</td>
+                            <td>@user.DiasSemLogin</td>
+                            <td>@user.Role</td>
+                            <td>
+                                @if (isGestor)
+                                {
+                                    <a asp-action="RebaixarParaCliente" asp-route-id="@user.Id" class="btn btn-warning"><i class="fa-solid fa-user"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-action="PromoverParaGestor" asp-route-id="@user.Id" class="btn btn-warning"><i class="fa-solid fa-user-shield"></i></a>
+                                }
+
+                                @if (currentUserIsAdmin || (!isGestor && !isAdmin))
+                                {
+                                    <a asp-action="DeleteUser" asp-route-id="@user.Id" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

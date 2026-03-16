@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@inject UserManager<Utilizador> userManager;
+
+@{
+    var utilizador = await userManager.GetUserAsync(User);
+    var primeiroNome = User?.Claims.FirstOrDefault(c => c.Type == "PrimeiroNome")?.Value;
+    var apelido = User?.Claims.FirstOrDefault(c => c.Type == "Apelido")?.Value;
+    var email = User?.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+}
+ 
+<div class="container-fluid px-4">
+    <br />
+    <br />
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="fw-semibold">Nome: @primeiroNome @apelido</p> 
+            <p class="fw-semibold">Email: @email</p>
+        </div>
+    </div>
+</div>
+
