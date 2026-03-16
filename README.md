@@ -1,8 +1,6 @@
 # Projeto To-Do List em ASP.NET Core MVC
 
 # Feito por Cristian Grigorita, Gabriel Bezerra e  Guilherme Barbosa
-# Disciplina de Tecnologias da Internet - ESGTS
-# Docente: Ana Catarina Cruz
 
 ## Instruções para Restaurar o Backup da Base de Dados
 
